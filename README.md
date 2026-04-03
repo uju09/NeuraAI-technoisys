@@ -2,9 +2,9 @@
 
 # ⚡ NeuraAI
 
-**AI-Powered Code Generation Platform**
+**AI-Powered Game Generation Platform**
 
-_Describe what you want — NeuraAI's multi-agent pipeline enhances your prompt, generates production-ready React components, debugs them, and renders a live preview — all in seconds._
+_Describe the game you want — NeuraAI's multi-agent pipeline exclusively uses Google's Gemini to enhance your prompt, generate fully playable web games, debug them, and render a live preview — all in seconds._
 
 [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
@@ -17,7 +17,7 @@ _Describe what you want — NeuraAI's multi-agent pipeline enhances your prompt,
 
 ## 🎯 What is NeuraAI?
 
-NeuraAI is a full-stack AI code generation platform that transforms natural language prompts into fully functional, rendered React components. It features a **multi-agent backend pipeline** and an **instant-preview frontend** with a sleek, modern editor interface.
+NeuraAI is a full-stack AI game generation platform that transforms natural language prompts into fully functional, rendered web games. Built exclusively on Google's Gemini models, it features a **multi-agent backend pipeline** and an **instant-preview frontend** with a sleek, modern editor interface.
 
 ### ✨ Key Features
 
@@ -25,7 +25,7 @@ NeuraAI is a full-stack AI code generation platform that transforms natural lang
 |---|---|
 | 🤖 **Multi-Agent Pipeline** | Prompt Enhancement → Code Generation → Debugging → Validation |
 | 👁️ **Instant Live Preview** | Generated components render in a live iframe instantly |
-| 🔄 **Multi-Provider AI** | Supports Gemini, OpenRouter, Ollama, and Groq |
+| 🧠 **Gemini Powered** | Built exclusively on Google's most powerful Gemini models |
 | 📜 **Generation History** | Browse, reuse, and delete past generations |
 | 🐳 **Docker Ready** | One-command deployment with Docker Compose |
 | ⚡ **Job Queue** | Bull + Redis powered async generation with real-time progress |
@@ -64,7 +64,7 @@ lucide/
 
 - **Node.js** ≥ 20
 - **Docker** & **Docker Compose** (for backend)
-- A **Gemini API Key** (or OpenRouter key)
+- A **Gemini API Key**
 
 ### 1. Clone the Repository
 
@@ -114,7 +114,6 @@ See [`backend/README.md`](./backend/README.md) for full server deployment instru
 | Variable | Required | Description |
 |---|---|---|
 | `GEMINI_API_KEY` | ✅ | Google Gemini API key |
-| `OPENROUTER_API_KEY` | ❌ | OpenRouter API key (alternative provider) |
 | `DATABASE_URL` | ✅ | PostgreSQL connection string |
 | `REDIS_URL` | ✅ | Redis connection string |
 | `PORT` | ❌ | Server port (default: `3000`) |
@@ -131,7 +130,7 @@ See [`backend/README.md`](./backend/README.md) for full server deployment instru
 | **Backend** | Express.js, Prisma ORM, Bull Queue |
 | **Database** | PostgreSQL 15 |
 | **Cache / Queue** | Redis 7 |
-| **AI Providers** | Google Gemini, OpenRouter, Ollama, Groq |
+| **AI Provider** | Google Gemini |
 | **Infra** | Docker, Docker Compose |
 
 ---

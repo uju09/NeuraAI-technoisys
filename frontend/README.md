@@ -2,7 +2,7 @@
 
 # 🎨 NeuraAI — Frontend
 
-**AI Code Editor with Instant Live Preview**
+**AI Game Editor with Instant Live Preview**
 
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
@@ -14,7 +14,7 @@
 
 ## 📖 Overview
 
-The frontend is a **React + Vite** single-page application that provides a premium AI-powered code editor experience. Users describe what they want in natural language, and the app communicates with the backend pipeline to generate React components and render them in a **live iframe preview**.
+The frontend is a **React + Vite** single-page application that provides a premium AI-powered game editor experience. Users describe what they want in natural language, and the app communicates with the backend pipeline to generate web games and render them in a **live iframe preview**.
 
 ### ✨ Features
 
@@ -24,7 +24,7 @@ The frontend is a **React + Vite** single-page application that provides a premi
 - 🔄 **Real-time progress tracking** with animated loading steps
 - 📜 **Persistent chat history** with local storage
 - 🎬 **Smooth page transitions** powered by Framer Motion & Lenis
-- 🤖 **Multi-provider support** — switch between Gemini and OpenRouter
+- 🧠 **Gemini Powered** — exclusive integration with Google's most powerful Gemini models
 - 📤 **Export options** for generated code
 
 ---
@@ -97,7 +97,7 @@ Global state is managed with **Zustand** and persisted to `localStorage` under t
 | `history` | `array` | Chat-style log of user prompts and AI responses |
 | `loadingStep` | `string` | Pipeline progress: `idle` → `enhancing` → `generating` → `building` → `ready` |
 | `jobProgress` | `number` | Numeric progress (0–100) from backend |
-| `provider` | `string` | Selected AI provider (`gemini` / `openrouter`) |
+| `provider` | `string` | Selected AI provider (fixed to `gemini`) |
 | `currentView` | `string` | Navigation state (`landing` / `canvas`) |
 | `activeTab` | `string` | Preview panel tab (`preview` / `code`) |
 | `viewport` | `string` | Preview size (`desktop` / `tablet` / `mobile`) |
