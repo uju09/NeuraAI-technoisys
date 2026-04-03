@@ -2,7 +2,7 @@
 
 # ⚙️ NeuraAI — Backend
 
-**Multi-Agent AI Code Generation Pipeline**
+**Multi-Agent AI Game Generation Pipeline**
 
 [![Docker Hub](https://img.shields.io/badge/Docker_Hub-uju009%2Flucide--backend-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/uju009/lucide-backend)
 [![Express](https://img.shields.io/badge/Express-4.x-000000?logo=express&logoColor=white)](https://expressjs.com/)
@@ -14,7 +14,7 @@
 
 ## 📖 Overview
 
-The backend is an **Express.js** server that orchestrates a multi-agent AI pipeline to transform natural language prompts into production-ready React components. It uses **Bull** queues backed by **Redis** for async job processing and **Prisma** with **PostgreSQL** for persistent storage.
+The backend is an **Express.js** server that orchestrates a multi-agent AI pipeline to transform natural language prompts into fully functional, production-ready web games. Fully powered by Google's Gemini, it uses **Bull** queues backed by **Redis** for async job processing and **Prisma** with **PostgreSQL** for persistent storage.
 
 ---
 
@@ -54,8 +54,8 @@ The backend is an **Express.js** server that orchestrates a multi-agent AI pipel
 
 | # | Agent | File | Role |
 |---|---|---|---|
-| 1 | **Prompt Enhancer** | `agents/promptEnhancer.js` | Refines the raw user prompt for optimal code generation |
-| 2 | **Code Generator** | `agents/codeGenerator.js` | Generates React component code from the enhanced prompt |
+| 1 | **Prompt Enhancer** | `agents/promptEnhancer.js` | Refines the raw user prompt for optimal game generation |
+| 2 | **Code Generator** | `agents/codeGenerator.js` | Generates game code from the enhanced prompt using Gemini |
 | 3 | **Code Debugger** | `agents/codeDebugger.js` | Iteratively fixes syntax/runtime errors (up to `MAX_DEBUG_LOOPS`) |
 | 4 | **Output Validator** | `agents/outputValidator.js` | Validates the final output meets quality standards |
 
@@ -83,9 +83,6 @@ backend/
 │   ├── utils/
 │   │   ├── aiClient.js        # Unified AI client interface
 │   │   ├── geminiClient.js    # Google Gemini provider
-│   │   ├── openrouterClient.js# OpenRouter provider
-│   │   ├── groqClient.js      # Groq provider
-│   │   ├── ollamaClient.js    # Ollama (local) provider
 │   │   ├── astAnalyzer.js     # AST analysis utilities
 │   │   ├── codeExtractor.js   # Extracts code blocks from AI responses
 │   │   ├── prisma.js          # Prisma client singleton
@@ -109,7 +106,7 @@ Queues a code generation job.
 **Request Body:**
 ```json
 {
-  "prompt": "A 3D rotating cube with neon glow",
+  "prompt": "A retro pixel-art Snake game with high score tracking",
   "userId": "user-abc123",
   "provider": "gemini",
   "model": ""
@@ -283,8 +280,6 @@ docker compose down              # Stop all services
 |---|---|---|
 | `PORT` | `3000` | Server port |
 | `GEMINI_API_KEY` | — | Google Gemini API key |
-| `OPENROUTER_API_KEY` | — | OpenRouter API key |
-| `OPENROUTER_DEFAULT_MODEL` | `google/gemini-2.0-flash-001` | Default OpenRouter model |
 | `REDIS_URL` | `redis://localhost:6379` | Redis connection URL |
 | `DATABASE_URL` | — | PostgreSQL connection string |
 | `MAX_DEBUG_LOOPS` | `3` | Max auto-debug iterations per generation |
