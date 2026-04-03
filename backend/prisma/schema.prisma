@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email          String    @unique @db.VarChar(255)
+  password_hash  String?   @db.Text
+  display_name   String?   @db.VarChar(100)
+  avatar_url     String?   @db.Text
+  is_admin       Boolean?  @default(false)
+  is_active      Boolean?  @default(true)
+  email_verified Boolean?  @default(false)
+  last_login_at  DateTime? @db.Timestamptz
+  created_at     DateTime? @default(now()) @db.Timestamptz
+  updated_at     DateTime? @default(now()) @db.Timestamptz
+
+  oauth_providers UserOAuthProvider[]
+  sessions        UserSession[]
+  api_keys        UserApiKey[]
+  projects        Project[]
+  chats           Chat[]
+  collaborations  ProjectCollaborator[]
+  deployments     Deployment[]
+  usage_logs      UsageLog[]
+  components      Component[]
+}
+
+model UserOAuthProvider {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id          String    @db.Uuid
+  provider         String    @db.VarChar(50)
+  provider_user_id String    @db.VarChar(255)
+  access_token     String?   @db.Text
+  refresh_token    String?   @db.Text
+  token_expires_at DateTime? @db.Timestamptz
+  created_at       DateTime? @default(now()) @db.Timestamptz
+  updated_at       DateTime? @default(now()) @db.Timestamptz
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@unique([provider, provider_user_id])
+}
+
+model UserSession {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id       String   @db.Uuid
+  session_token String   @unique @db.Text
+  ip_address    String?  @db.Inet
+  user_agent    String?  @db.Text
+  expires_at    DateTime @db.Timestamptz
+  created_at    DateTime? @default(now()) @db.Timestamptz
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@index([session_token])
+  @@index([user_id])
+}
+
+model UserApiKey {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id       String    @db.Uuid
+  provider      String    @db.VarChar(100)
+  encrypted_key String    @db.Text
+  label         String?   @db.VarChar(100)
+  is_active     Boolean?  @default(true)
+  last_used_at  DateTime? @db.Timestamptz
+  created_at    DateTime? @default(now()) @db.Timestamptz
+  updated_at    DateTime? @default(now()) @db.Timestamptz
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@unique([user_id, provider])
+}
+
+model Project {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id       String    @db.Uuid
+  name          String    @db.VarChar(255)
+  description   String?   @db.Text
+  template      String?   @db.VarChar(100)
+  is_public     Boolean?  @default(false)
+  is_archived   Boolean?  @default(false)
+  thumbnail_url String?   @db.Text
+  created_at    DateTime? @default(now()) @db.Timestamptz
+  updated_at    DateTime? @default(now()) @db.Timestamptz
+
+  user          User                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  files         ProjectFile[]
+  chats         Chat[]
+  collaborators ProjectCollaborator[]
+  deployments   Deployment[]
+  @@index([user_id])
+  @@index([created_at(sort: Desc)])
+}
+
+model ProjectFile {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  project_id String    @db.Uuid
+  file_path  String    @db.Text
+  content    String?   @db.Text
+  encoding   String?   @default("utf-8") @db.VarChar(20)
+  is_binary  Boolean?  @default(false)
+  size_bytes Int?
+  created_at DateTime? @default(now()) @db.Timestamptz
+  updated_at DateTime? @default(now()) @db.Timestamptz
+
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  @@unique([project_id, file_path])
+  @@index([project_id])
+}
+
+model Chat {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  project_id  String?   @db.Uuid
+  user_id     String    @db.Uuid
+  title       String?   @db.VarChar(255)
+  model       String?   @db.VarChar(100)
+  provider    String?   @db.VarChar(100)
+  is_archived Boolean?  @default(false)
+  created_at  DateTime? @default(now()) @db.Timestamptz
+  updated_at  DateTime? @default(now()) @db.Timestamptz
+
+  project      Project?      @relation(fields: [project_id], references: [id], onDelete: SetNull)
+  user         User          @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  messages     ChatMessage[]
+  bolt_actions BoltAction[]
+  usage_logs   UsageLog[]
+  @@index([user_id])
+  @@index([project_id])
+}
+
+model ChatMessage {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chat_id         String    @db.Uuid
+  role            String    @db.VarChar(20)
+  content         String    @db.Text
+  annotations     Json?     @db.JsonB
+  tokens_used     Int?
+  model           String?   @db.VarChar(100)
+  sequence_number Int
+  created_at      DateTime? @default(now()) @db.Timestamptz
+
+  chat         Chat         @relation(fields: [chat_id], references: [id], onDelete: Cascade)
+  bolt_actions BoltAction[]
+  @@unique([chat_id, sequence_number])
+  @@index([chat_id])
+  @@index([created_at])
+}
+
+model BoltAction {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chat_id       String    @db.Uuid
+  message_id    String?   @db.Uuid
+  action_type   String    @db.VarChar(50)
+  file_path     String?   @db.Text
+  command       String?   @db.Text
+  content       String?   @db.Text
+  status        String?   @default("pending") @db.VarChar(20)
+  error_message String?   @db.Text
+  executed_at   DateTime? @db.Timestamptz
+  created_at    DateTime? @default(now()) @db.Timestamptz
+
+  chat    Chat         @relation(fields: [chat_id], references: [id], onDelete: Cascade)
+  message ChatMessage? @relation(fields: [message_id], references: [id], onDelete: SetNull)
+  @@index([chat_id])
+}
+
+model UserSettings {
+  user_id              String    @id @db.Uuid
+  default_provider     String?   @default("anthropic") @db.VarChar(100)
+  default_model        String?   @default("claude-sonnet-4-20250514") @db.VarChar(100)
+  theme                String?   @default("dark") @db.VarChar(20)
+  editor_font_size     Int?      @default(14)
+  editor_tab_size      Int?      @default(2)
+  auto_save            Boolean?  @default(true)
+  prompt_enhancement   Boolean?  @default(true)
+  context_optimization Boolean?  @default(true)
+  custom_system_prompt String?   @db.Text
+  preferences          Json?     @default("{}") @db.JsonB
+  updated_at           DateTime? @default(now()) @db.Timestamptz
+}
+
+model ProjectCollaborator {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  project_id  String    @db.Uuid
+  user_id     String    @db.Uuid
+  role        String?   @default("viewer") @db.VarChar(20)
+  invited_by  String?   @db.Uuid
+  accepted_at DateTime? @db.Timestamptz
+  created_at  DateTime? @default(now()) @db.Timestamptz
+
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@unique([project_id, user_id])
+}
+
+model Deployment {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  project_id  String    @db.Uuid
+  user_id     String    @db.Uuid
+  provider    String    @db.VarChar(50)
+  deploy_url  String?   @db.Text
+  status      String?   @default("pending") @db.VarChar(20)
+  build_log   String?   @db.Text
+  deployed_at DateTime? @db.Timestamptz
+  created_at  DateTime? @default(now()) @db.Timestamptz
+
+  project Project @relation(fields: [project_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  @@index([project_id])
+}
+
+model UsageLog {
+  id                BigInt    @id @default(autoincrement())
+  user_id           String    @db.Uuid
+  provider          String    @db.VarChar(100)
+  model             String    @db.VarChar(100)
+  prompt_tokens     Int?      @default(0)
+  completion_tokens Int?      @default(0)
+  total_tokens      Int?      @default(0)
+  chat_id           String?   @db.Uuid
+  created_at        DateTime? @default(now()) @db.Timestamptz
+
+  user User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  chat Chat? @relation(fields: [chat_id], references: [id], onDelete: SetNull)
+  @@index([user_id])
+  @@index([created_at(sort: Desc)])
+}
+
+model PipelineLog {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  job_id     String    @db.VarChar(255)
+  agent      String    @db.VarChar(50)
+  latency_ms Int?
+  prompt_len Int?
+  resp_len   Int?
+  created_at DateTime? @default(now()) @db.Timestamptz
+}
+
+model Component {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id             String?   @db.Uuid
+  prompt              String    @db.Text
+  enhanced_prompt     String?   @db.Text
+  code                String?   @db.Text
+  validated           Boolean   @default(false)
+  debug_attempts      Int       @default(0)
+  validation_attempts Int       @default(0)
+  created_at          DateTime? @default(now()) @db.Timestamptz
+
+  user User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
