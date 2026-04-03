@@ -1,10 +1,10 @@
-<![CDATA[<div align="center">
+<div align="center">
 
-# ⚡ LudicForge
+# ⚡ NeuraAI
 
 **AI-Powered Code Generation Platform**
 
-_Describe what you want — LudicForge's multi-agent pipeline enhances your prompt, generates production-ready React components, debugs them, and renders a live preview — all in seconds._
+_Describe what you want — NeuraAI's multi-agent pipeline enhances your prompt, generates production-ready React components, debugs them, and renders a live preview — all in seconds._
 
 [![Node.js](https://img.shields.io/badge/Node.js-20+-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
@@ -15,9 +15,9 @@ _Describe what you want — LudicForge's multi-agent pipeline enhances your prom
 
 ---
 
-## 🎯 What is LudicForge?
+## 🎯 What is NeuraAI?
 
-LudicForge is a full-stack AI code generation platform that transforms natural language prompts into fully functional, rendered React components. It features a **multi-agent backend pipeline** and an **instant-preview frontend** with a sleek, modern editor interface.
+NeuraAI is a full-stack AI code generation platform that transforms natural language prompts into fully functional, rendered React components. It features a **multi-agent backend pipeline** and an **instant-preview frontend** with a sleek, modern editor interface.
 
 ### ✨ Key Features
 
@@ -139,4 +139,4 @@ See [`backend/README.md`](./backend/README.md) for full server deployment instru
 ## 📄 License
 
 This project is licensed under the MIT License.
-]]>
+
