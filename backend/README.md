@@ -1,6 +1,6 @@
-<![CDATA[<div align="center">
+<div align="center">
 
-# ⚙️ LudicForge — Backend
+# ⚙️ NeuraAI — Backend
 
 **Multi-Agent AI Code Generation Pipeline**
 
@@ -230,7 +230,7 @@ services:
       - PORT=3000
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - REDIS_URL=redis://redis:6379
-      - DATABASE_URL=postgresql://user:password@postgres:5432/ludicforge
+      - DATABASE_URL=postgresql://user:password@postgres:5432/neuraai
       - MAX_DEBUG_LOOPS=3
       - MAX_VALIDATION_LOOPS=2
       - NODE_ENV=production
@@ -250,7 +250,7 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: ludicforge
+      POSTGRES_DB: neuraai
     restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -307,4 +307,4 @@ The Prisma schema includes models for a full-featured platform:
 | `Deployment` | Deployment records |
 | `UsageLog` | Token usage tracking per provider/model |
 | `PipelineLog` | Agent pipeline performance metrics |
-]]>
+

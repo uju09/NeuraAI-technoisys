@@ -1,6 +1,6 @@
-<![CDATA[<div align="center">
+<div align="center">
 
-# 🎨 LudicForge — Frontend
+# 🎨 NeuraAI — Frontend
 
 **AI Code Editor with Instant Live Preview**
 
@@ -75,7 +75,7 @@ frontend/
 
 | Component | Description |
 |---|---|
-| **`Header`** | Top bar with LudicForge branding, sidebar toggle, and reset controls |
+| **`Header`** | Top bar with NeuraAI branding, sidebar toggle, and reset controls |
 | **`PromptInput`** | Text input area with provider selector, send button, and cancel support |
 | **`HistoryList`** | Scrollable sidebar showing past generations with click-to-restore |
 | **`PreviewPanel`** | Main workspace — tabbed between live Preview (iframe) and Code view |
@@ -187,4 +187,4 @@ npm run lint       # Run ESLint
 
 - Scans `./src/**/*.{js,jsx}` for class usage
 - Extend with custom theme tokens as needed
-]]>
+
